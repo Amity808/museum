@@ -11,11 +11,20 @@ contract MuseumFactory {
     error Only_Admin();
 
     event MusuemDeployed(address indexed, address index);
+    event MuseumStructEvent(string, string, address);
 
+// create storage for school and location with unique name
+
+struct MuseumStruct {
+    string name;
+    string location;
+    address deployed;
+}
 
 // use 2d mapping
     mapping(uint256 => mapping(address => address)) public _addressDeployed;
     mapping(uint256 => address) public deployedAddress;
+    mapping(uint256 => MuseumStruct) public _deployed;
     mapping(address => address) public deployedAddressR;
 
     address admin;
@@ -33,7 +42,7 @@ contract MuseumFactory {
 
 
     function deployMuseum(uint256 _fee,
-        address _token
+        address _token, string memory _name, string memory _location
         ) external returns(address museum) {
         // bytes memory bytecode = type(Museum).creationCode;
         bytes memory bytecode = abi.encodePacked(
@@ -45,11 +54,10 @@ contract MuseumFactory {
         }
      
 
-
         if (address(museum) == address(0)) revert Deployment_Failed();
-        
-        
+        Museum(museum).setDeployedAddress(address(museum));
         deployedAddress[deploymentCount] = address(museum);
+        _deployed[deploymentCount] = MuseumStruct(_name, _location, address(museum));
         _addressDeployed[deploymentCount][msg.sender] = address(museum);
         deployedAddressR[msg.sender] = address(museum);
         deploymentCount++;

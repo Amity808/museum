@@ -24,7 +24,9 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
     uint256 public totalMuseums;
     uint256 public tokenCounter;
     address public admin;
+    address public deployedAddress;
     uint256 public fee;
+    bool public isAddressSet;
     
 
     enum ArtifactStatus {
@@ -35,9 +37,7 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
     }
 
     struct Artifact {
-        string name;
         string imageURI;
-        string location;
         uint256 ticketPrice;
         uint256 totalRevenue;
         uint256 totalVisitors;
@@ -104,15 +104,11 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
     }
 
     function createArtifact(
-        string memory _name,
-        string memory _location,
         uint256 _ticketPrice,
         string memory _imageURI
     ) public onlyManger {
         artifact[totalMuseums] = Artifact(
-            _name,
             _imageURI,
-            _location,
             _ticketPrice,
             0,
             0,
@@ -125,6 +121,13 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
         totalMuseums++;
     }
 
+
+function setDeployedAddress(address _deployaddress) public {
+    require(isAddressSet == false, "Already set deployedAddress");
+    deployedAddress = _deployaddress;
+    isAddressSet = true;
+    
+}
     function flagNFt(uint256 index) public Must_Be_GreaterZero(index) {
         artifact[index].status = ArtifactStatus.Flagged;
     }
@@ -142,8 +145,6 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
         view
         returns (
             string memory,
-            string memory,
-            string memory,
             uint256,
             uint256,
             uint256,
@@ -154,9 +155,7 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
         Artifact storage art = artifact[_index];
 
         return (
-            art.name,
             art.imageURI,
-            art.location,
             art.ticketPrice,
             art.totalRevenue,
             art.totalVisitors,
