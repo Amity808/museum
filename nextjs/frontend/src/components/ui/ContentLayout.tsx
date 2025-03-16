@@ -10,7 +10,7 @@ const ContentLayout = () => {
             <div className="flex w-full bg-black lg:flex-row overflow-hidden max-sm:flex-col sm:flex-col">
                 <div className="card bg-black rounded-box grid  grow place-items-center">
                     <BackgroundGradient className='rounded-[22px] max-w-lg p-4 sm:p-8 bg-white dark:bg-zinc-900'>
-                        <Image src="artifact.webp" alt="" className="" />
+                        <Image src="/artifact.webp" alt="" width={500} height={500} className="" />
                     </BackgroundGradient>
                     
                 </div>

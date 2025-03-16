@@ -1,11 +1,21 @@
-import React from 'react'
+'use client'
+import React, { useState, useEffect} from 'react'
 import AccountDetails from './Wallet-Componets/AccountDetails'
-import { useSwitchChain } from 'wagmi'
+import { useSwitchChain, useAccount } from 'wagmi'
 import Link from 'next/link'
 
 
 const Navbar = () => {
   const { chains, switchChain} = useSwitchChain()
+  const { address } = useAccount();
+
+  const [clientReady, setClientReady] = useState(false)
+
+  useEffect(() => {
+    setClientReady(true)
+  }, [])
+
+  if (!clientReady) return null // Prevent hydration errors
   return (
     <div>
       <div className="navbar bg-black shadow-sm">
@@ -48,6 +58,8 @@ const Navbar = () => {
               </details>
             </li>
             <li><a>Contact us</a></li>
+            {address && <li><Link href={`/${address}`}>Artifacts</Link></li>}
+            
           </ul>
         </div>
         <div className="navbar-end">

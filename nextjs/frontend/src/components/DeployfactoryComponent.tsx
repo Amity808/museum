@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useWriteContract, useSimulateContract, useReadContract, useAccount } from 'wagmi'
 import { abi } from '../contract/MuseumFactory';
 import { FactoryAddress, USDT } from '@/helper/constant'
+// import CustomButton from './ui/CustomButton';
 // import { ethers } from "ethers";
 // import { parseEther } from 'viem';
 
@@ -44,12 +45,13 @@ const DeployfactoryComponent = () => {
     return (
         <div className=''>
 
-            <div className='form-group mb-8'>
+            <div className='form-group mb-8 items-center flex justify-center flex-col gap-5'>
                 <input type='url' placeholder='Set fee' value={fee?.toString()}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setFee(BigInt(e.target.value || "0"))
                     }} className='input' />
-                <button onClick={handleDeployInstance}>Deploy</button>
+                    
+                <button onClick={handleDeployInstance} className='btn btn-xs sm:btn-sm md:btn-md lg:btn-lg'>Deploy</button>
             </div>
 
         </div>
