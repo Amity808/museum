@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import CustomInput from './ui/CustomInput'
 // import CustomButton from './ui/CustomButton'
 import useValidation from '@/hooks/useValidation'
-import { validateName, validateAmount } from '@/helper/validation'
+import { validateAmount } from '@/helper/validation'
 import { abi } from '../contract/MuseumFactory';
 import { abiMuseum } from '@/contract/Museum';
 import { useReadContract, useAccount, useSimulateContract, useWriteContract } from 'wagmi';
@@ -15,13 +15,11 @@ import Link from 'next/link';
 
 const MintArtifact = () => {
 
-    const [name, setName] = useState<string>('')
-    const [location, setLocation] = useState<string>('')
+    
     const [ticketPice, setTicketPice] = useState<string>('')
     const [imageURL, setImageURL] = useState<string>('')
 
-    const isNameValid = useValidation(name, validateName);
-    const isLocationValid = useValidation(location, validateName);
+    
     const isTicketPiceValid = useValidation(ticketPice, validateAmount);
 
     const { address } = useAccount();
@@ -41,7 +39,7 @@ const MintArtifact = () => {
         abi: abiMuseum,
         address: DeployAddressToNewContract,
         functionName: "createArtifact",
-        args: [name, location, parseEther(ticketPice), imageURL]
+        args: [parseEther(ticketPice), imageURL]
     })
 
 
@@ -77,15 +75,7 @@ const MintArtifact = () => {
                     <>
                         <form action="" onSubmit={handleCreatArtifact}>
                             {/* <p className="text-red-900">{notification?.message}</p> */}
-                            <CustomInput placeholder='Enter name' error={isNameValid?.message ?? ""} value={name}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    setName(e.target.value);
-                                }} className='w-[300px]' />
-
-                            <CustomInput placeholder='Enter Museum location' error={isLocationValid?.message ?? ""} value={location}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    setLocation(e.target.value);
-                                }} />
+                           
                             <CustomInput placeholder='Enter amount' error={isTicketPiceValid?.message ?? ""} type='number' value={ticketPice}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                     //setTicketPice(e.target.value ?? 0);

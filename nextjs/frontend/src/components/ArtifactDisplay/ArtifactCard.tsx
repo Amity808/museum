@@ -11,9 +11,7 @@ import { abiMuseum } from '@/contract/Museum';
 //     addressDeploy: `0x${string}`
 // }
 interface ResultFect {
-    _name: string;
-    _imageURI: string;
-    location: string;
+    _imageURI: string;    
     ticketPrice: number;
     totalRevenue: number;
     totalVisitors: number;
@@ -48,14 +46,12 @@ const ArtifactCard = () => {
 const getAllArtifacts = useCallback(() => {
     if (!getData) return null;
     setArtifacts({
-    _name: getData[0],
-    _imageURI: getData[1],
-    location: getData[2],
-    ticketPrice: Number(getData[3]),
-    totalRevenue: Number(getData[4]),
-    totalVisitors: Number(getData[5]),
-    status: Number(getData[6]),
-    owner: `0x${getData[7]}`
+    _imageURI: getData[0],
+    ticketPrice: Number(getData[1]),
+    totalRevenue: Number(getData[2]),
+    totalVisitors: Number(getData[3]),
+    status: Number(getData[4]),
+    owner: `0x${getData[5]}`
     })
 
 }, [getData])
@@ -78,12 +74,12 @@ return (
                 className="object-contain"
             />
             <p className="text-base sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">
-                {artifacts?._name}
+                {/* {artifacts?._name} */}
             </p>
 
             <div>
             <p className="text-base sm:text-xl text-black mt-4 mb-2 dark:text-neutral-200">
-                {artifacts?.location}
+                {/* {artifacts?.location} */}
             </p>
             <p>{artifacts?.status}</p>
             </div>
