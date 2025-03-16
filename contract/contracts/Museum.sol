@@ -13,20 +13,19 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
     using SafeERC20 for IERC20;
 
-    // IToken public token;
-
     bytes32 public constant MANAGER_ROLE = keccak256("MANAGER_ROLE");
     bytes32 public constant USER_ROLE = keccak256("USER");
 
     error INVALID_INDEX();
     error settlePayment();
+    error Already_Initilized();
 
     address public token;
-    // address admin;
     uint256 public totalMuseums;
     uint256 public tokenCounter;
     address public admin;
     uint256 public fee;
+    
 
     enum ArtifactStatus {
         Active,
@@ -58,6 +57,11 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
         );
         _;
     }
+
+    modifier onlyAdminD() {
+        require(msg.sender == admin, "Only admin can call this function");
+        _;
+    }
   
     modifier onlyManger() {
         require(
@@ -77,22 +81,21 @@ contract Museum is ERC721URIStorage, ReentrancyGuard, AccessControl {
         _;
     }
 
-
-
-    constructor(
-        uint256 _fee,
+    constructor( uint256 _fee,
         address _token,
-        address _admin
-    ) ERC721("Museum", "MHR") {
+        address _admin) ERC721("Museum", "MHR"){
         _setRoleAdmin(USER_ROLE, DEFAULT_ADMIN_ROLE);
         _setRoleAdmin(MANAGER_ROLE, DEFAULT_ADMIN_ROLE);
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        _grantRole(DEFAULT_ADMIN_ROLE, _admin);
         tokenCounter = 0;
         totalMuseums = 0;
         token = _token;
         admin = _admin;
         fee = _fee;
+        
     }
+
+ 
 
     function mintDocToNFT(string memory imageURI) public {
         _safeMint(msg.sender, tokenCounter);

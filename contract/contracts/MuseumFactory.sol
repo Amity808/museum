@@ -34,24 +34,26 @@ contract MuseumFactory {
 
     function deployMuseum(uint256 _fee,
         address _token
-        ) external returns(address musuem) {
+        ) external returns(address museum) {
+        // bytes memory bytecode = type(Museum).creationCode;
         bytes memory bytecode = abi.encodePacked(
             type(Museum).creationCode, abi.encode(_fee, _token, msg.sender)
         );
         bytes32 salt = bytes32(deploymentCount);
         assembly {
-            musuem := create2(0, add(bytecode, 32), mload(bytecode), salt)
+            museum := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
+     
 
-        if (musuem == address(0)) revert Deployment_Failed();
+
+        if (address(museum) == address(0)) revert Deployment_Failed();
         
         
-
-        deployedAddress[deploymentCount] = musuem;
-        _addressDeployed[deploymentCount][msg.sender] = musuem;
-        deployedAddressR[msg.sender] = musuem;
+        deployedAddress[deploymentCount] = address(museum);
+        _addressDeployed[deploymentCount][msg.sender] = address(museum);
+        deployedAddressR[msg.sender] = address(museum);
         deploymentCount++;
 
-        emit MusuemDeployed(musuem, msg.sender);
+        emit MusuemDeployed(museum, msg.sender);
     }
 }
